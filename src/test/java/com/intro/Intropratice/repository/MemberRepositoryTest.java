@@ -1,18 +1,20 @@
 package com.intro.Intropratice.repository;
 
 import com.intro.Intropratice.domain.Member;
-import org.assertj.core.api.Assertions;
+import com.intro.Intropratice.service.BeanConfig;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
-import java.util.List;
-import java.util.Optional;
+import static org.assertj.core.api.Assertions.*;
 
-@Transactional
+@DataJpaTest
+@Import(BeanConfig.class)
 class MemberRepositoryTest {
-    
-    @Autowired MemberRepository mr;
+
+    @Autowired private MemberRepository mr;
 
     @Test
     public void 회원가입(){
@@ -26,14 +28,25 @@ class MemberRepositoryTest {
 
         //then
         Member result = mr.findById(member.getId()).get();
-        Assertions.assertThat(member).isEqualTo(result);
+        assertThat(member).isEqualTo(result);
 
     }
 
-//    @Test
-//    public void withDraw(Member member) {
-//        em.remove(member);
-//    }
+    @Test
+    public void 탈퇴() {
+        //given
+        Member member = new Member();
+        member.setId("id");
+        member.setPassword("password");
+
+        member = mr.join(member);
+
+        //when
+        mr.withDraw(member);
+
+        //then
+        assertThat(mr.findById(member.getId()).isEmpty()).isEqualTo(true);
+    }
 //
 //    @Test
 //    public Optional<Member> login(Member member) {
