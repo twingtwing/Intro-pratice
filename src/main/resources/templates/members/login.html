@@ -1,25 +1,19 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
+<h3>login</h3>
 <div class="container">
-  <div>
-    <h1>연습용 페이지 입니다.</h1>
-    <h2>회원 가입</h2>
-    <form action="/members/join" method="post">
-      <p>
-        <label>ID : </label>
-        <input type="text" name="id" id="id" placeholder="아이디를 입력해주세요...">
-      </p>
-      <p>
-        <label>PASSWORD : </label>
-        <input type="text" name="password" id="password" placeholder="비밀번호를 입력해주세요...">
-      </p>
-      <p>
-        <button type="submit">회원 가입</button>
-      </p>
-    </form>
-
-  </div>
+  <form action="/members/login" method="post">
+    <div class="form-group">
+      <label for="id">id</label>
+      <input type="text" id="id" name="id" placeholder="id을 입력하세요">
+    </div>
+    <div class="form-group">
+      <label for="password">password</label>
+      <input type="text" id="password" name="password" placeholder="password을 입력하세요">
+    </div>
+    <button type="submit">등록</button>
+  </form>
 </div> <!-- /container -->
 </body>
 </html>

@@ -1,7 +1,6 @@
 package com.intro.Intropratice.repository;
 
 import com.intro.Intropratice.domain.Member;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -24,17 +23,23 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public void withDraw(Member member) {
-        em.remove(member);
+    public Member withDraw(Member member) {
+        Member result = em.find(Member.class,member.getId());
+        em.remove(result);
+        return member;
     }
 
     @Override
     public Optional<Member> login(Member member) {
-        Member result =  em.createQuery("SELECT m FROM MEMBER m WHERE m.ID = :id AND m.PASSWORD = :password",Member.class)
-                            .setParameter("id",member.getId())
-                            .setParameter("password",member.getPassword())
-                            .getSingleResult();
-        return Optional.ofNullable(result);
+//        Member result =  em.createQuery("SELECT m FROM Member m WHERE m.id = :id AND m.password = :password", Member.class)
+//                            .setParameter("id",member.getId())
+//                            .setParameter("password",member.getPassword())
+//                            .getSingleResult();
+//        return Optional.ofNullable(result);
+        return  em.createQuery("SELECT m FROM Member m WHERE m.id = :id AND m.password = :password", Member.class)
+                .setParameter("id",member.getId())
+                .setParameter("password",member.getPassword())
+                .getResultList().stream().findFirst();
     }
 
     @Override
@@ -44,7 +49,7 @@ public class JpaMemberRepository implements MemberRepository {
 
     @Override
     public List<Member> members() {
-        return em.createQuery("SELECT m FROM MEMBER m",Member.class)
+        return em.createQuery("SELECT m FROM Member m",Member.class)
                 .getResultList();
     }
 }

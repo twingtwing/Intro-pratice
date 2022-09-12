@@ -11,12 +11,13 @@ public class MemberService {
 
     private final MemberRepository mr;
 
+    @Autowired
     public MemberService(MemberRepository mr) {
         this.mr = mr;
     }
 
     public String join(Member member){
-        validateDupli(member.getId());
+        validateDupli(member);
 
         mr.join(member);
         return member.getId();
@@ -26,20 +27,21 @@ public class MemberService {
         return mr.login(member);
     }
 
-    public void withDraw(Member member){
+    public String withDraw(Member member){
         mr.withDraw(member);
+        return member.getId();
     }
 
-    public Optional<Member> memberOne(Member member){
-        return mr.findById(member.getId());
+    public Optional<Member> memberOne(String id){
+        return mr.findById(id);
     }
 
     public List<Member> members(){
         return mr.members();
     }
 
-    public void validateDupli(String id){
-        mr.findById(id)
+    public void validateDupli(Member member){
+        mr.findById(member.getId())
                 .ifPresent(m -> {
                     throw new IllegalStateException("이미 존재하는 회원입니다.");
                 });

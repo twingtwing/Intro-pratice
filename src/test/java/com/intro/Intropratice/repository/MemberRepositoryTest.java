@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
@@ -46,26 +48,85 @@ class MemberRepositoryTest {
 
         //then
         assertThat(mr.findById(member.getId()).isEmpty()).isEqualTo(true);
-    }
-//
-//    @Test
-//    public Optional<Member> login(Member member) {
-//        Member result =  em.createQuery("SELECT m FROM MEMBER m WHERE m.ID = :id AND m.PASSWORD = :password",Member.class)
-//                .setParameter("id",member.getId())
-//                .setParameter("password",member.getPassword())
-//                .getSingleResult();
-//        return Optional.ofNullable(result);
-//    }
-//
-//    @Test
-//    public Optional<Member> findById(String id) {
-//        return Optional.ofNullable(em.find(Member.class,id));
-//    }
 
-//    @Test
-//    public List<Member> members() {
-//        return em.createQuery("SELECT m FROM MEMBER m",Member.class)
-//                .getResultList();
-//    }
+    }
+
+    @Test
+    public void 로그인() {
+        //given
+        Member member = new Member();
+        member.setId("id");
+        member.setPassword("password");
+
+        //when
+        mr.join(member);
+        Member result = mr.login(member).get();
+
+        //then
+        assertThat(result).isEqualTo(member);
+    }
+
+    @Test
+    public void 로그인2() {
+        //given
+        Member member = new Member();
+        member.setId("id");
+        member.setPassword("password");
+
+        //when
+
+        //then
+        mr.login(member).isEmpty();
+    }
+
+    @Test
+    public void 아이디() {
+        //given
+        Member member = new Member();
+        member.setId("id");
+        member.setPassword("password");
+
+        //when
+        mr.join(member);
+        Member result = mr.findById(member.getId()).get();
+
+        //Then
+        assertThat(result).isEqualTo(member);
+    }
+
+    @Test
+    public void 아이디2() {
+        //given
+        Member member = new Member();
+        member.setId("id");
+        member.setPassword("password");
+
+        //when
+
+        //Then
+        mr.findById(member.getId()).isEmpty();
+    }
+
+    @Test
+    public void members() {
+        //given
+        Member member = new Member();
+        member.setId("id");
+        member.setPassword("password");
+
+        Member member2= new Member();
+        member2.setId("id2");
+        member2.setPassword("password2");
+
+        //when
+        mr.join(member);
+        mr.join(member2);
+
+        //then
+        List<Member> result = mr.members();
+
+        assertThat(result.size()).isEqualTo(2);
+
+    }
 
 }
