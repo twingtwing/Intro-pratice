@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>PASSWORD</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="member : ${members}">
+                <td th:text="${member.id}"></td>
+                <td th:text="${member.password}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <a th:href="@{'/members/withdraw?'(id=${form.id})}">탈퇴</a>
+</div>
+</body>
+</html>
